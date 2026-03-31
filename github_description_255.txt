@@ -1,0 +1,1 @@
+Secure IoT Sensor Node with STM32F4, FreeRTOS, and comprehensive OTA updates. Complete embedded firmware solution featuring secure boot, dual-bank updates, real-time sensor processing, and web-based management interface.
