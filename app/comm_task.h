@@ -28,6 +28,26 @@
 void comm_task(void *arg);
 
 /**
+ * @brief Process CLI command
+ * 
+ * Process incoming CLI commands from UART interface.
+ * Supports: status, version, dump, reboot, help
+ * 
+ * @param command Command string
+ * @return 0 on success, -1 on error
+ */
+int process_cli_command(const char* command);
+
+/**
+ * @brief Send CLI response
+ * 
+ * Send formatted response to CLI interface.
+ * 
+ * @param response Response string
+ */
+void send_cli_response(const char* response);
+
+/**
  * @brief Initialize communication subsystem
  * 
  * Sets up UART hardware, initializes communication buffers,

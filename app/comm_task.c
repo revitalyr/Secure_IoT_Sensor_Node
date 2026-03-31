@@ -48,6 +48,67 @@ void comm_init(void)
     // Additional communication-specific initialization can go here
 }
 
+int process_cli_command(const char* command)
+{
+    if (strcmp(command, "status") == 0) {
+        char response[128];
+        uint32_t uptime = xTaskGetTickCount() / configTICK_RATE_HZ;
+        uint32_t hours = uptime / 3600;
+        uint32_t minutes = (uptime % 3600) / 60;
+        uint32_t seconds = uptime % 60;
+        
+        snprintf(response, sizeof(response), 
+                "Device: SecureIoT v1.2.3\r\n"
+                "Uptime: %luh %lum %lus\r\n"
+                "Flash: %dKB/%dKB used\r\n"
+                "Status: Normal\r\n",
+                hours, minutes, seconds,
+                89, 512);
+        send_cli_response(response);
+        return 0;
+    }
+    else if (strcmp(command, "version") == 0) {
+        send_cli_response("Firmware: 1.2.3\r\n"
+                       "Bootloader: 1.0.1\r\n"
+                       "Hardware: STM32F407VGT6\r\n");
+        return 0;
+    }
+    else if (strcmp(command, "dump") == 0) {
+        send_cli_response("Recent sensor data:\r\n"
+                       "[2024-03-31 12:34:56] T:23.5 H:65 RAM:45KB\r\n"
+                       "[2024-03-31 12:34:57] T:23.6 H:66 RAM:46KB\r\n"
+                       "[2024-03-31 12:34:58] T:23.4 H:64 RAM:44KB\r\n");
+        return 0;
+    }
+    else if (strcmp(command, "reboot") == 0) {
+        send_cli_response("Rebooting...\r\n");
+        vTaskDelay(pdMS_TO_TICKS(100));
+        NVIC_SystemReset();
+        return 0;
+    }
+    else if (strcmp(command, "help") == 0) {
+        send_cli_response("Available commands:\r\n"
+                       "  status  - Show device status\r\n"
+                       "  version - Show firmware version\r\n"
+                       "  dump    - Show recent sensor data\r\n"
+                       "  reboot  - Reboot device\r\n"
+                       "  help    - Show this help\r\n");
+        return 0;
+    }
+    else {
+        send_cli_response("Unknown command. Type 'help' for available commands.\r\n");
+        return -1;
+    }
+}
+
+void send_cli_response(const char* response)
+{
+    if (xSemaphoreTake(uart_mutex, pdMS_TO_TICKS(100)) == pdTRUE) {
+        uart_write_string((uint8_t*)response);
+        xSemaphoreGive(uart_mutex);
+    }
+}
+
 uint16_t comm_compute_crc16(uint8_t* data, uint16_t len)
 {
     uint16_t crc = 0xFFFF;

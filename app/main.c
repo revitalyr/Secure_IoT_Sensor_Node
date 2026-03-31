@@ -17,8 +17,13 @@
 #include "queue.h"
 #include "semphr.h"
 #include "stm32f4xx_hal.h"
-#include "sensor_task_refactored.h"
-#include "web_interface_refactored.h"
+#include "sensor_task.h"
+#include "comm_task.h"
+#include "storage_task.h"
+#include "update_task.h"
+#include "web_interface.h"
+#include "led_manager.h"
+#include "performance_monitor.h"
 #include "system_config.h"
 #include <stdint.h>
 #include <stdbool.h>
@@ -156,13 +161,50 @@ static bool main_create_tasks(void)
         sensor_task,                    /* Task function */
         "SensorTask",                   /* Task name */
         MAIN_SENSOR_TASK_STACK_SIZE,     /* Stack size */
-        NULL,                           /* Parameters */
-        SENSOR_TASK_PRIORITY,             /* Priority */
-        &s_sensor_task_handle           /* Task handle */
-    );
+        NULL,                           /* Task parameter */
+        MAIN_SENSOR_TASK_PRIORITY,      /* Task priority */
+        &s_sensor_task_handle);         /* Task handle */
     
     if (result != pdPASS) {
-        main_error_handler("Sensor task creation failed");
+        return false;
+    }
+    
+    /* Create communication task */
+    result = xTaskCreate(
+        comm_task,                     /* Task function */
+        "CommTask",                    /* Task name */
+        MAIN_COMM_TASK_STACK_SIZE,       /* Stack size */
+        NULL,                           /* Task parameter */
+        MAIN_COMM_TASK_PRIORITY,         /* Task priority */
+        &s_comm_task_handle);          /* Task handle */
+    
+    if (result != pdPASS) {
+        return false;
+    }
+    
+    /* Create storage task */
+    result = xTaskCreate(
+        storage_task,                   /* Task function */
+        "StorageTask",                  /* Task name */
+        MAIN_STORAGE_TASK_STACK_SIZE,    /* Stack size */
+        NULL,                           /* Task parameter */
+        MAIN_STORAGE_TASK_PRIORITY,      /* Task priority */
+        &s_storage_task_handle);        /* Task handle */
+    
+    if (result != pdPASS) {
+        return false;
+    }
+    
+    /* Create OTA update task */
+    result = xTaskCreate(
+        update_task,                    /* Task function */
+        "UpdateTask",                   /* Task name */
+        MAIN_UPDATE_TASK_STACK_SIZE,     /* Stack size */
+        NULL,                           /* Task parameter */
+        MAIN_UPDATE_TASK_PRIORITY,       /* Task priority */
+        &s_update_task_handle);         /* Task handle */
+    
+    if (result != pdPASS) {
         return false;
     }
     
@@ -171,13 +213,37 @@ static bool main_create_tasks(void)
         web_interface_task,             /* Task function */
         "WebTask",                      /* Task name */
         MAIN_WEB_TASK_STACK_SIZE,       /* Stack size */
-        NULL,                           /* Parameters */
-        MAIN_WEB_TASK_PRIORITY,         /* Priority */
-        &s_web_task_handle              /* Task handle */
-    );
+        NULL,                           /* Task parameter */
+        MAIN_WEB_TASK_PRIORITY,         /* Task priority */
+        &s_web_task_handle);           /* Task handle */
     
     if (result != pdPASS) {
-        main_error_handler("Web task creation failed");
+        return false;
+    }
+    
+    /* Create LED management task */
+    result = xTaskCreate(
+        led_task,                      /* Task function */
+        "LedTask",                      /* Task name */
+        MAIN_LED_TASK_STACK_SIZE,        /* Stack size */
+        NULL,                           /* Task parameter */
+        MAIN_LED_TASK_PRIORITY,          /* Task priority */
+        &s_led_task_handle);            /* Task handle */
+    
+    if (result != pdPASS) {
+        return false;
+    }
+    
+    /* Create performance monitoring task */
+    result = xTaskCreate(
+        performance_task,               /* Task function */
+        "PerfTask",                     /* Task name */
+        MAIN_PERF_TASK_STACK_SIZE,       /* Stack size */
+        NULL,                           /* Task parameter */
+        MAIN_PERF_TASK_PRIORITY,         /* Task priority */
+        &s_perf_task_handle);           /* Task handle */
+    
+    if (result != pdPASS) {
         return false;
     }
     

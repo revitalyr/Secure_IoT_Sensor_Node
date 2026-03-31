@@ -87,6 +87,33 @@ void storage_task(void *arg);
  */
 void update_task(void *arg);
 
+/**
+ * @brief Web interface task
+ * 
+ * FreeRTOS task for web server and API management.
+ * 
+ * @param arg Task argument (unused)
+ */
+void web_interface_task(void *arg);
+
+/**
+ * @brief LED management task
+ * 
+ * FreeRTOS task for LED state machine and status indication.
+ * 
+ * @param arg Task argument (unused)
+ */
+void led_task(void *arg);
+
+/**
+ * @brief Performance monitoring task
+ * 
+ * FreeRTOS task for system performance metrics collection.
+ * 
+ * @param arg Task argument (unused)
+ */
+void performance_task(void *arg);
+
 /* Queue Handles */
 extern QueueHandle_t sensor_queue;    /**< Sensor data queue */
 extern QueueHandle_t uart_rx_queue;   /**< UART receive queue */

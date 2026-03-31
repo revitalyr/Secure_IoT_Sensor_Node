@@ -46,11 +46,24 @@
 #define COMM_TASK_PRIORITY    2
 #define STORAGE_TASK_PRIORITY 2
 #define UPDATE_TASK_PRIORITY  3
+#define WEB_TASK_PRIORITY     2
+#define LED_TASK_PRIORITY     1
+#define PERF_TASK_PRIORITY    1
 #define IDLE_TASK_PRIORITY    0
 
-#define TASK_STACK_SIZE       256
-#define SENSOR_QUEUE_SIZE     16
-#define UART_RX_QUEUE_SIZE    128
+// Stack Sizes
+#define SENSOR_TASK_STACK_SIZE 256
+#define COMM_TASK_STACK_SIZE   512
+#define STORAGE_TASK_STACK_SIZE 256
+#define UPDATE_TASK_STACK_SIZE 512
+#define WEB_TASK_STACK_SIZE    1024
+#define LED_TASK_STACK_SIZE    128
+#define PERF_TASK_STACK_SIZE   256
+
+// Queue Depths
+#define SENSOR_QUEUE_DEPTH    5
+#define UART_QUEUE_DEPTH      10
+#define DATA_QUEUE_DEPTH      8
 
 // Communication Protocol
 #define PACKET_HEADER         0xAA

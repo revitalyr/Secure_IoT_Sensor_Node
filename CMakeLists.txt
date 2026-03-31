@@ -170,6 +170,8 @@ else()
         app/storage_task.c
         app/update_task.c
         app/web_interface.c
+        app/led_manager.c
+        app/performance_monitor.c
     )
     
     set(DRIVER_SOURCES
