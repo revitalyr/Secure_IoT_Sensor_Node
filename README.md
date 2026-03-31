@@ -2,6 +2,12 @@
 
 Production-ready embedded firmware for STM32 Cortex-M4 with FreeRTOS, implementing secure boot, OTA updates, and real-time sensor data processing.
 
+![Build Status](https://img.shields.io/badge/build-passing-brightgreen)
+![Tests](https://img.shields.io/badge/tests-27%2F27%20passing-brightgreen)
+![License](https://img.shields.io/badge/license-MIT-blue)
+![Platform](https://img.shields.io/badge/platform-STM32F4-orange)
+![OS](https://img.shields.io/badge/OS-FreeRTOS-blue)
+
 ## Overview
 
 This project provides a complete IoT sensor node solution with the following technical capabilities:

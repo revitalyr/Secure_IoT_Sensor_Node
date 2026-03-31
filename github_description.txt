@@ -1,0 +1,29 @@
+Production-ready Secure IoT Sensor Node with STM32F4, FreeRTOS, and comprehensive OTA updates. Complete embedded firmware solution featuring secure boot, dual-bank updates, real-time sensor processing, and web-based management interface.
+
+🔧 Features:
+• Secure boot chain with SHA256 verification
+• Dual-bank OTA updates with automatic rollback
+• FreeRTOS-based real-time architecture
+• DMA-based UART/SPI communication
+• Web dashboard with interactive charts
+• REST API for device management
+• 27 comprehensive tests (100% pass rate)
+• Professional English documentation
+• Zero compilation warnings
+
+📚 Technology Stack:
+• STM32F4 Cortex-M4 microcontroller
+• FreeRTOS real-time operating system
+• CMake build system + Makefile
+• Clang 20.1.8 compiler
+• JavaScript/HTML5 web interface
+• Python Flask API server
+
+🎯 Use Cases:
+• Industrial IoT sensor monitoring
+• Remote device management
+• Secure firmware deployment
+• Real-time data visualization
+• Production embedded development
+
+Keywords: STM32, FreeRTOS, IoT, Embedded, OTA, Secure Boot, Sensor Node, Real-time, Web Dashboard, REST API
