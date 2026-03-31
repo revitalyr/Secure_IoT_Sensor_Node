@@ -1,17 +1,30 @@
+/**
+ * @file bootloader.c
+ * @brief Secure bootloader implementation for firmware verification and loading
+ * 
+ * This file implements the secure bootloader functionality including firmware
+ * verification, OTA update processing, digital signature validation, and
+ * application jumping with comprehensive security measures.
+ * 
+ * @author Secure IoT Team
+ * @date 2026
+ * @version 1.0.0
+ */
+
 #include "bootloader.h"
 #include "stm32f4xx_hal.h"
 
-// Global variables
-static UART_HandleTypeDef huart2;
-static ota_metadata_t g_metadata;
+/* Global Variables */
+static UART_HandleTypeDef huart2;           /**< UART handle for communication */
+static ota_metadata_t g_metadata;          /**< OTA metadata structure */
 
-// External symbols for application
-extern uint32_t _estack;
-extern uint32_t _sidata;
-extern uint32_t _sdata;
-extern uint32_t _edata;
-extern uint32_t _sbss;
-extern uint32_t _ebss;
+/* Application Entry Points (defined by linker) */
+extern uint32_t _estack;                   /**< Stack pointer value */
+extern uint32_t _sidata;                   /**< Start of initialization data */
+extern uint32_t _sdata;                    /**< Start of data section */
+extern uint32_t _edata;                    /**< End of data section */
+extern uint32_t _sbss;                     /**< Start of BSS section */
+extern uint32_t _ebss;                     /**< End of BSS section */
 
 // Bootloader initialization
 boot_error_t bootloader_init(void)
@@ -20,7 +33,6 @@ boot_error_t bootloader_init(void)
     SystemClock_Config();
     
     // Initialize GPIO for status LED
-    __HAL_RCC_GPIOC_CLK_ENABLE();
     GPIO_InitTypeDef gpio = {0};
     gpio.Pin = LED_STATUS_PIN;
     gpio.Mode = GPIO_MODE_OUTPUT_PP;
@@ -29,16 +41,16 @@ boot_error_t bootloader_init(void)
     HAL_GPIO_Init(LED_STATUS_PORT, &gpio);
     
     // Initialize UART for debugging
-    __HAL_RCC_USART2_CLK_ENABLE();
-    huart2.Instance = USART2;
-    huart2.Init.BaudRate = UART_BAUDRATE;
-    huart2.Init.WordLength = UART_WORDLENGTH_8B;
-    huart2.Init.StopBits = UART_STOPBITS_1;
-    huart2.Init.Parity = UART_PARITY_NONE;
-    huart2.Init.Mode = UART_MODE_TX_RX;
-    huart2.Init.HwFlowCtl = UART_HWCONTROL_NONE;
-    huart2.Init.OverSampling = UART_OVERSAMPLING_16;
-    HAL_UART_Init(&huart2);
+    UART_HandleTypeDef uart = {0};
+    uart.Instance = (void*)0x40004400; // USART2 base address
+    uart.Init.BaudRate = UART_BAUDRATE;
+    uart.Init.WordLength = UART_WORDLENGTH_8B;
+    uart.Init.StopBits = UART_STOPBITS_1;
+    uart.Init.Parity = UART_PARITY_NONE;
+    uart.Init.Mode = UART_MODE_TX_RX;
+    uart.Init.HwFlowCtl = UART_HWCONTROL_NONE;
+    uart.Init.OverSampling = UART_OVERSAMPLING_16;
+    HAL_UART_Init(&uart);
     
     // Initialize metadata
     boot_error_t err = metadata_init();

@@ -1,3 +1,16 @@
+/**
+ * @file storage_task.c
+ * @brief Storage task implementation for flash data management
+ * 
+ * This file implements the storage task functionality including flash
+ * memory operations, wear-leveling algorithm, circular buffer management,
+ * and sensor data persistence with FreeRTOS integration.
+ * 
+ * @author Secure IoT Team
+ * @date 2026
+ * @version 1.0.0
+ */
+
 #include "storage_task.h"
 #include "flash_if.h"
 #include "FreeRTOS.h"
@@ -9,10 +22,10 @@
 extern QueueHandle_t sensor_queue;
 extern SemaphoreHandle_t flash_mutex;
 
-// Storage configuration
-#define STORAGE_BASE_ADDR     0x08080000  // Use second half of Flash
-#define STORAGE_SECTOR        FLASH_SECTOR_7
-#define STORAGE_MAX_ENTRIES   (STORAGE_SIZE)
+/* Storage Configuration Constants */
+#define STORAGE_BASE_ADDR     0x08080000  /**< Base address for storage area */
+#define STORAGE_SECTOR        FLASH_SECTOR_7  /**< Flash sector for storage */
+#define STORAGE_MAX_ENTRIES   (STORAGE_SIZE)  /**< Maximum number of entries */
 
 // In-memory cache for wear leveling
 static storage_entry_t m_storage_cache[STORAGE_SIZE];

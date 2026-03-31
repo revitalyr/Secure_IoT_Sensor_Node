@@ -1,0 +1,31 @@
+{
+  "name": "secure-iot-sensor-demo",
+  "version": "1.0.0",
+  "description": "Веб-визуализация для Secure IoT Sensor Node",
+  "main": "index.html",
+  "scripts": {
+    "dev": "python -m http.server 8080",
+    "build": "echo 'Build complete - ready for deployment'",
+    "serve": "python -m http.server 8080 --bind 0.0.0.0"
+  },
+  "keywords": [
+    "iot",
+    "sensor",
+    "visualization",
+    "dashboard",
+    "monitoring",
+    "security"
+  ],
+  "author": "Secure IoT Team",
+  "license": "MIT",
+  "devDependencies": {},
+  "dependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/your-org/secure-iot-sensor-node"
+  },
+  "bugs": {
+    "url": "https://github.com/your-org/secure-iot-sensor-node/issues"
+  },
+  "homepage": "https://github.com/your-org/secure-iot-sensor-node#readme"
+}

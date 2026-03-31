@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.15)
 
-# Test project
-project(Secure_IoT_Sensor_Node_Tests)
+# Test project - use native compiler for host testing
+project(Secure_IoT_Sensor_Node_Tests LANGUAGES C)
 
 # Set C standard for tests
 set(CMAKE_C_STANDARD 99)
@@ -9,55 +9,59 @@ set(CMAKE_C_STANDARD_REQUIRED ON)
 
 # Include directories for tests
 include_directories(
-    ${CMAKE_SOURCE_DIR}/config
-    ${CMAKE_SOURCE_DIR}/bootloader
-    ${CMAKE_SOURCE_DIR}/app
-    ${CMAKE_SOURCE_DIR}/drivers
-    ${CMAKE_SOURCE_DIR}/middleware/freertos/include
-    ${CMAKE_SOURCE_DIR}/middleware/crypto
-    ${CMAKE_SOURCE_DIR}/tests
-    ${CMAKE_SOURCE_DIR}/tests/mocks
+    ${CMAKE_CURRENT_SOURCE_DIR}/../config
+    ${CMAKE_CURRENT_SOURCE_DIR}/../bootloader
+    ${CMAKE_CURRENT_SOURCE_DIR}/../app
+    ${CMAKE_CURRENT_SOURCE_DIR}/../drivers
+    ${CMAKE_CURRENT_SOURCE_DIR}/../middleware/freertos/include
+    ${CMAKE_CURRENT_SOURCE_DIR}/../middleware/crypto
+    ${CMAKE_CURRENT_SOURCE_DIR}
+    ${CMAKE_CURRENT_SOURCE_DIR}/mocks
 )
 
 # Compiler flags for tests
-add_compile_options(
-    -Wall 
-    -Wextra 
-    -g
-    -DTEST_BUILD
-    -std=c99
-)
+if(MSVC)
+    add_compile_options(
+        /W3 
+        /Zi 
+        /DTEST_BUILD
+        /std:c99
+    )
+else()
+    add_compile_options(
+        -Wall 
+        -Wextra 
+        -g
+        -DTEST_BUILD
+        -std=c99
+    )
+endif()
 
 # Test framework source
 set(TEST_FRAMEWORK_SOURCES
-    tests/test_framework.c
-    tests/mocks/hal_mock.c
+    test_framework.c
+    mocks/hal_mock.c
+    mocks/freertos_mock.c
 )
 
 # Unit test sources
 set(UNIT_TEST_SOURCES
-    tests/unit/test_uart.c
-    tests/unit/test_flash.c
-    tests/unit/test_ota.c
+    unit/test_uart.c
+    unit/test_flash.c
+    unit/test_ota.c
 )
 
 # Integration test sources
 set(INTEGRATION_TEST_SOURCES
-    tests/integration/test_system.c
-)
-
-# Mock sources (simplified FreeRTOS)
-set(MOCK_SOURCES
-    tests/mocks/freertos_mock.c
+    integration/test_system.c
 )
 
 # Create test runner executable
 add_executable(test_runner
-    tests/test_runner.c
+    test_runner.c
     ${TEST_FRAMEWORK_SOURCES}
     ${UNIT_TEST_SOURCES}
     ${INTEGRATION_TEST_SOURCES}
-    ${MOCK_SOURCES}
 )
 
 # Link math library if needed
@@ -147,17 +151,12 @@ install(TARGETS test_runner
     OPTIONAL
 )
 
-# Package tests
-set(CPACK_COMPONENT_TEST_DISPLAY_NAME "Test Suite")
-set(CPACK_COMPONENT_TEST_DESCRIPTION "Unit and integration tests for Secure IoT Sensor Node")
-cpack_add_component(test_runner)
-
 # Print test configuration
 message(STATUS "Test Configuration:")
 message(STATUS "  Test Framework: Custom")
 message(STATUS "  Mock Framework: HAL Mock")
-message(STATUS "  Unit Tests: ${CMAKE_CURRENT_LIST_DIR}/tests/unit")
-message(STATUS "  Integration Tests: ${CMAKE_CURRENT_LIST_DIR}/tests/integration")
+message(STATUS "  Unit Tests: ${CMAKE_CURRENT_LIST_DIR}/unit")
+message(STATUS "  Integration Tests: ${CMAKE_CURRENT_LIST_DIR}/integration")
 if(GCOV_PATH)
     message(STATUS "  Coverage: Enabled")
 else()

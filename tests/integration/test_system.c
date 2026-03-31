@@ -1,12 +1,16 @@
 #include "../test_framework.h"
 #include "../mocks/hal_mock.h"
-#include "../app/main.h"
-#include "../app/sensor_task.h"
-#include "../app/comm_task.h"
-#include "../app/storage_task.h"
-#include "../drivers/uart.h"
-#include "../drivers/flash_if.h"
+#include "../mocks/freertos_mock.h"
+#include "../../app/main.h"
+#include "../../app/sensor_task.h"
+#include "../../app/comm_task.h"
+#include "../../app/storage_task.h"
+#include "../../drivers/uart.h"
+#include "../../drivers/flash_if.h"
 #include <string.h>
+
+// Define config for FreeRTOS mock
+#define configTICK_RATE_HZ 1000
 
 // Test complete sensor data flow
 int test_sensor_data_flow(void)

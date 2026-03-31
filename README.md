@@ -1,22 +1,22 @@
-# 🚀 Secure IoT Sensor Node (STM32 + FreeRTOS)
+# Secure IoT Sensor Node
 
-A production-ready embedded firmware project demonstrating advanced IoT device capabilities with secure boot, OTA updates, and real-time data processing.
+Production-ready embedded firmware for STM32 Cortex-M4 with FreeRTOS, implementing secure boot, OTA updates, and real-time sensor data processing.
 
-## 🧩 Overview
+## Overview
 
-This project implements a comprehensive IoT sensor node with the following key features:
+This project provides a complete IoT sensor node solution with the following technical capabilities:
 
-- **Secure Boot Chain** - SHA256 hash verification + digital signature validation
-- **Dual-Bank OTA Updates** - Fail-safe firmware updates with automatic rollback
-- **RTOS Architecture** - FreeRTOS-based concurrent task design
-- **High-Performance Communication** - DMA-based UART/SPI with interrupt handling
-- **Flash Storage Management** - Wear-leveling and circular buffer implementation
-- **Binary Protocol** - CRC-protected communication protocol
+- **Secure Boot Chain** - SHA256 hash verification and digital signature validation
+- **Dual-Bank OTA Updates** - Fail-safe firmware updates with automatic rollback mechanism  
+- **RTOS Architecture** - FreeRTOS-based concurrent task design with priority scheduling
+- **High-Performance Communication** - DMA-based UART/SPI with interrupt-driven I/O
+- **Flash Storage Management** - Wear-leveling algorithm and circular buffer implementation
+- **Binary Protocol** - CRC-protected communication protocol with error detection
 - **Real-time Sensor Processing** - Continuous data acquisition and transmission
 
-## 🏗️ Architecture
+## System Architecture
 
-### Memory Layout
+### Memory Map
 
 ```
 0x08000000 ┌─────────────────┐
@@ -37,7 +37,7 @@ This project implements a comprehensive IoT sensor node with the following key f
 0x080B1000 └─────────────────┘
 ```
 
-### System Architecture
+### Software Architecture
 
 ```
 ┌─────────────────────────────────────────────────────────────┐

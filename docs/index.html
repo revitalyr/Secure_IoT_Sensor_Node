@@ -1,0 +1,788 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🔒 Secure IoT Sensor Node - Documentation (Final English)</title>
+    
+    <!-- External resources -->
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10.6.1/dist/mermaid.min.js"></script>
+    
+    <!-- Styles -->
+    <style>
+        /* Reset and base styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(10px);
+            padding: 20px;
+        }
+
+        /* Header styles */
+        .header {
+            text-align: center;
+            margin-bottom: 20px;
+            padding: 20px 0;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            color: transparent;
+        }
+
+        /* Navigation tabs */
+        .nav-tabs {
+            display: flex;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            padding: 5px;
+            margin-bottom: 20px;
+            gap: 2px;
+            flex-wrap: wrap;
+        }
+
+        .nav-tab {
+            background: rgba(255, 255, 255, 0.2);
+            color: #333;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            margin-right: 2px;
+        }
+
+        .nav-tab:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
+        }
+
+        .nav-tab.active {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+        }
+
+        /* Content area */
+        .content {
+            padding: 20px;
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.98);
+        }
+
+        .tab-pane {
+            display: none;
+            animation: fadeIn 0.5s ease-in-out;
+        }
+
+        .tab-pane.active {
+            display: block;
+        }
+
+        .tab-pane h2 {
+            color: #333;
+            margin-bottom: 20px;
+            font-size: 1.8rem;
+            font-weight: 600;
+        }
+
+        /* Diagram container */
+        .diagram-container {
+            position: relative;
+            margin: 20px 0;
+            background: #f8f9fa;
+            border-radius: 8px;
+            border: 1px solid #e9ecef;
+            transition: all 0.2s ease;
+            overflow: auto;
+            max-height: 80vh;
+            padding: 20px;
+        }
+
+        .mermaid {
+            background: transparent;
+            display: block;
+            width: 100%;
+            text-align: center;
+        }
+
+        /* Scale controls */
+        .scale-controls {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: rgba(102, 126, 234, 0.95);
+            border-radius: 20px;
+            padding: 6px 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            z-index: 100;
+            backdrop-filter: blur(8px);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+        }
+
+        .scale-btn {
+            background: rgba(255, 255, 255, 0.25);
+            color: white;
+            border: none;
+            padding: 4px 10px;
+            border-radius: 16px;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: bold;
+            transition: all 0.2s ease;
+        }
+
+        .scale-btn:hover {
+            background: rgba(255, 255, 255, 0.4);
+            transform: scale(1.05);
+        }
+
+        .scale-display {
+            color: white;
+            font-size: 12px;
+            font-weight: bold;
+            min-width: 45px;
+            text-align: center;
+            background: rgba(0,0,0,0.3);
+            padding: 2px 8px;
+            border-radius: 20px;
+        }
+
+        /* Content sections */
+        .feature-section {
+            margin-top: 20px;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            border: 1px solid #e9ecef;
+        }
+
+        .feature-section h3 {
+            color: #333;
+            margin-bottom: 15px;
+            font-size: 1.2rem;
+            font-weight: 600;
+        }
+
+        .feature-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .feature-list li {
+            padding: 8px 0;
+            border-bottom: 1px solid #e9ecef;
+            display: flex;
+            align-items: center;
+        }
+
+        .feature-list li:last-child {
+            border-bottom: none;
+        }
+
+        .feature-list li::before {
+            content: "✅";
+            margin-right: 10px;
+            font-size: 1.2rem;
+        }
+
+        .code-block {
+            background: #2d3748;
+            color: #e2e8f0;
+            padding: 20px;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+            overflow-x: auto;
+            margin: 20px 0;
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .container { padding: 10px; }
+            .header h1 { font-size: 2rem; }
+            .content { padding: 15px; }
+            .nav-tabs { justify-content: flex-start; overflow-x: auto; }
+            .scale-controls { top: 5px; right: 5px; padding: 3px 6px; gap: 4px; }
+            .scale-btn { padding: 2px 6px; font-size: 10px; }
+            .scale-display { font-size: 10px; min-width: 35px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <h1>🔒 Secure IoT Sensor Node</h1>
+            <p>IoT Device Monitoring and Management System</p>
+        </header>
+        
+        <!-- Navigation tabs -->
+        <nav class="nav-tabs">
+            <button class="nav-tab active" data-tab="overview">📊 Overview</button>
+            <button class="nav-tab" data-tab="architecture">🏗️ Architecture</button>
+            <button class="nav-tab" data-tab="firmware">⚙️ Firmware</button>
+            <button class="nav-tab" data-tab="web">🌐 Web Dashboard</button>
+            <button class="nav-tab" data-tab="security">🔒 Security</button>
+            <button class="nav-tab" data-tab="deployment">🚀 Deployment</button>
+        </nav>
+
+        <!-- Tab content -->
+        <main class="content">
+            <!-- Overview tab -->
+            <section id="overview" class="tab-pane active">
+                <h2>📊 System Overview</h2>
+                <div class="diagram-container">
+                    <div class="scale-controls">
+                        <button class="scale-btn" onclick="changeScale(-0.1)">−</button>
+                        <span class="scale-display">100%</span>
+                        <button class="scale-btn" onclick="changeScale(0.1)">+</button>
+                        <button class="scale-btn" onclick="resetScale()">⟲</button>
+                    </div>
+                    <div class="mermaid" id="overview-diagram">
+graph TB
+    subgraph "Secure IoT Sensor Node"
+        A[STM32F4 MCU<br/>Cortex-M4]
+        B[FreeRTOS<br/>Real-time OS]
+        C[Sensor Task<br/>Data Generation]
+        D[Web Interface<br/>JSON Protocol]
+        E[UART Bridge<br/>Python]
+    end
+    
+    subgraph "Web Dashboard"
+        F[Flask API Server<br/>REST Endpoints]
+        G[React/Vue Frontend<br/>Real-time UI]
+        H[WebSocket<br/>Live Updates]
+    end
+    
+    subgraph "Data Flow"
+        I[Sensor Data<br/>JSON Format]
+        J[Commands<br/>LED Control]
+        K[Events<br/>System Logs]
+    end
+    
+    A --> B
+    B --> C
+    C --> D
+    D --> E
+    E --> F
+    F --> G
+    G --> H
+    C --> I
+    I --> F
+    J --> D
+    K --> F
+                    </div>
+                </div>
+            </section>
+
+            <!-- Architecture tab -->
+            <section id="architecture" class="tab-pane">
+                <h2>🏗️ System Architecture</h2>
+                <div class="diagram-container">
+                    <div class="scale-controls">
+                        <button class="scale-btn" onclick="changeScale(-0.1)">−</button>
+                        <span class="scale-display">100%</span>
+                        <button class="scale-btn" onclick="changeScale(0.1)">+</button>
+                        <button class="scale-btn" onclick="resetScale()">⟲</button>
+                    </div>
+                    <div class="mermaid" id="architecture-diagram">
+graph TB
+    subgraph "Bootloader Layer"
+        A[Bootloader<br/>STM32 Boot]
+        B[Flash Memory<br/>Firmware Storage]
+        C[Boot Configuration<br/>Boot Pins]
+    end
+    
+    subgraph "Application Layer"
+        D[Main Application<br/>main.c]
+        E[FreeRTOS Kernel<br/>Tasks and Queues]
+        F[Sensor Task<br/>Data Acquisition]
+        G[Web Interface Task<br/>Communication]
+    end
+    
+    subgraph "Middleware Layer"
+        H[HAL Drivers<br/>STM32F4xx HAL]
+        I[RTOS Layer<br/>FreeRTOS API]
+        J[Communication<br/>UART/I2C/SPI]
+    end
+    
+    subgraph "Hardware Drivers"
+        K[GPIO Driver<br/>LED Control]
+        L[I2C Driver<br/>Sensors]
+        M[UART Driver<br/>Serial Comm]
+        N[Timer Driver<br/>System Timing]
+    end
+    
+    subgraph "Hardware Abstraction"
+        O[STM32F4 MCU<br/>Cortex-M4]
+        P[Memory<br/>RAM/Flash]
+        Q[Peripherals<br/>UART/I2C/GPIO]
+    end
+    
+    A --> D
+    B --> A
+    C --> A
+    
+    D --> E
+    E --> F
+    E --> G
+    
+    F --> H
+    G --> H
+    E --> I
+    
+    H --> K
+    H --> L
+    H --> M
+    H --> N
+    
+    K --> O
+    L --> O
+    M --> O
+    N --> O
+    
+    O --> P
+    O --> Q
+                    </div>
+                </div>
+            </section>
+
+            <!-- Firmware tab -->
+            <section id="firmware" class="tab-pane">
+                <h2>⚙️ Firmware Architecture</h2>
+                <div class="diagram-container">
+                    <div class="scale-controls">
+                        <button class="scale-btn" onclick="changeScale(-0.1)">−</button>
+                        <span class="scale-display">100%</span>
+                        <button class="scale-btn" onclick="changeScale(0.1)">+</button>
+                        <button class="scale-btn" onclick="resetScale()">⟲</button>
+                    </div>
+                    <div class="mermaid" id="firmware-diagram">
+flowchart TD
+    A[main.c] --> B[Hardware Init]
+    B --> C[FreeRTOS Objects]
+    C --> D[Task Creation]
+    
+    D --> E[sensor_task]
+    D --> F[web_interface_task]
+    
+    E --> G[Generate Sensors]
+    G --> H[Queue Send]
+    
+    F --> I[Queue Receive]
+    I --> J[UART JSON]
+    J --> K[Process Commands]
+    
+    H --> L[Web Dashboard]
+    K --> L
+    
+    E --> M[Every 2s]
+    F --> M
+    
+    style A fill:#667eea
+    style E fill:#764ba2
+    style F fill:#764ba2
+    style L fill:#28a745
+                    </div>
+                </div>
+                
+                <div class="feature-section">
+                    <h3>🎯 Production-Quality Features</h3>
+                    <ul class="feature-list">
+                        <li><strong>Type Safety</strong> - Fixed-width integers, volatile MMIO access</li>
+                        <li><strong>ISR Safety</strong> - Proper ISR signatures, ...FromISR() API only</li>
+                        <li><strong>Memory Safety</strong> - Static allocation, bounds checking</li>
+                        <li><strong>Error Handling</strong> - Comprehensive recovery mechanisms</li>
+                        <li><strong>Documentation</strong> - Full Doxygen coverage</li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- Web tab -->
+            <section id="web" class="tab-pane">
+                <h2>🌐 Web Dashboard</h2>
+                <div class="diagram-container">
+                    <div class="scale-controls">
+                        <button class="scale-btn" onclick="changeScale(-0.1)">−</button>
+                        <span class="scale-display">100%</span>
+                        <button class="scale-btn" onclick="changeScale(0.1)">+</button>
+                        <button class="scale-btn" onclick="resetScale()">⟲</button>
+                    </div>
+                    <div class="mermaid" id="web-diagram">
+graph TB
+    subgraph "Frontend Components"
+        A[Sensor Cards<br/>Temperature, Pulse, CPU]
+        B[LED Control<br/>Visual Indicator]
+        C[Real-time Charts<br/>Fixed Height]
+        D[Security Status<br/>Encryption, Firewall]
+        E[WiFi Indicator<br/>Signal Strength]
+        F[Event Log<br/>System Events]
+    end
+    
+    subgraph "Backend Services"
+        G[Flask API<br/>REST Endpoints]
+        H[Device Bridge<br/>UART Communication]
+        I[Serial Handler<br/>JSON Protocol]
+    end
+    
+    A --> G
+    B --> G
+    C --> G
+    D --> G
+    E --> G
+    F --> G
+    
+    G --> H
+    H --> I
+    I --> J[STM32 Device]
+    J --> I
+    I --> H
+    H --> G
+    G --> A
+    
+    style A fill:#667eea
+    style B fill:#ffc107
+    style C fill:#28a745
+    style D fill:#dc3545
+    style E fill:#17a2b8
+    style F fill:#6c757d
+                    </div>
+                </div>
+                
+                <div class="feature-section">
+                    <h3>🎯 Dashboard Features</h3>
+                    <ul class="feature-list">
+                        <li><strong>Visual LED Indicators</strong> - Realistic LED lights with animations</li>
+                        <li><strong>WiFi Indicator</strong> - Progress bar with color indication</li>
+                        <li><strong>Fixed Height Charts</strong> - No container growth</li>
+                        <li><strong>Interactive Controls</strong> - LED on/off, reboot functionality</li>
+                        <li><strong>System Status</strong> - Uptime, memory, firmware version</li>
+                        <li><strong>Event Logging</strong> - Complete operation logging</li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- Security tab -->
+            <section id="security" class="tab-pane">
+                <h2>🔒 Security & Data Protection</h2>
+                <div class="diagram-container">
+                    <div class="scale-controls">
+                        <button class="scale-btn" onclick="changeScale(-0.1)">−</button>
+                        <span class="scale-display">100%</span>
+                        <button class="scale-btn" onclick="changeScale(0.1)">+</button>
+                        <button class="scale-btn" onclick="resetScale()">⟲</button>
+                    </div>
+                    <div class="mermaid" id="security-diagram">
+graph TB
+    subgraph "Security Layers"
+        A[Data Encryption<br/>AES-256]
+        B[Authentication<br/>Token-based]
+        C[Firewall<br/>Packet Filtering]
+        D[Audit Log<br/>Event Tracking]
+    end
+    
+    subgraph "Protection Mechanisms"
+        E[Input Validation<br/>Bounds Checking]
+        F[Memory Safety<br/>No Dynamic Allocation]
+        G[Timeout Protection<br/>Finite Waits]
+        H[Error Recovery<br/>Graceful Degradation]
+    end
+    
+    subgraph "Communication Security"
+        I[JSON Protocol<br/>Checksum Validation]
+        J[Packet Structure<br/>Start/End Markers]
+        K[ISR Safety<br/>FromISR Only]
+    end
+    
+    A --> E
+    B --> F
+    C --> G
+    D --> H
+    E --> I
+    F --> J
+    G --> K
+    H --> I
+    
+    style A fill:#dc3545
+    style B fill:#ffc107
+    style C fill:#fd7e14
+    style D fill:#20c997
+    style E fill:#6f42c1
+    style F fill:#0d6efd
+    style G fill:#198754
+    style H fill:#6c757d
+                    </div>
+                </div>
+                
+                <div class="feature-section">
+                    <h3>🛡️ Security Measures</h3>
+                    <ul class="feature-list">
+                        <li><strong>Type Safety</strong> - Fixed-width integers, no UB</li>
+                        <li><strong>Buffer Protection</strong> - snprintf, bounds checking</li>
+                        <li><strong>Memory Safety</strong> - Static allocation, no malloc</li>
+                        <li><strong>ISR Safety</strong> - Proper ISR patterns, no blocking</li>
+                        <li><strong>Protocol Security</strong> - Checksum validation, packet structure</li>
+                        <li><strong>Error Handling</strong> - Comprehensive recovery mechanisms</li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- Deployment tab -->
+            <section id="deployment" class="tab-pane">
+                <h2>🚀 Deployment & Usage</h2>
+                <div class="diagram-container">
+                    <div class="scale-controls">
+                        <button class="scale-btn" onclick="changeScale(-0.1)">−</button>
+                        <span class="scale-display">100%</span>
+                        <button class="scale-btn" onclick="changeScale(0.1)">+</button>
+                        <button class="scale-btn" onclick="resetScale()">⟲</button>
+                    </div>
+                    <div class="mermaid" id="deployment-diagram">
+flowchart TD
+    A[Build System] --> B{CMake or Makefile}
+    B -->|CMake| C[Cross-compile]
+    B -->|Makefile| D[Development]
+    
+    C --> E[Flash Firmware]
+    D --> F[Run Tests]
+    
+    E --> G[Connect Device]
+    F --> H[Verify Tests]
+    
+    G --> I[Launch Services]
+    H --> I
+    
+    I --> J[Web Dashboard]
+    I --> K[API Server]
+    I --> L[Device Bridge]
+    
+    J --> M[http://localhost:8080]
+    K --> N[http://localhost:5000]
+    
+    M --> O[Monitor System]
+    N --> O
+    
+    style A fill:#667eea
+    style C fill:#28a745
+    style D fill:#ffc107
+    style E fill:#dc3545
+    style F fill:#17a2b8
+    style I fill:#6f42c1
+    style J fill:#fd7e14
+    style K fill:#20c997
+                    </div>
+                </div>
+                
+                <div class="feature-section">
+                    <h3>🛠️ Build & Deployment</h3>
+                    <ul class="feature-list">
+                        <li><strong>CMake</strong> - Cross-compilation for ARM, tests</li>
+                        <li><strong>Makefile</strong> - Convenient development commands</li>
+                        <li><strong>Docker</strong> - Isolated Python environment</li>
+                        <li><strong>Testing</strong> - Comprehensive test suite</li>
+                        <li><strong>Documentation</strong> - Automatic generation</li>
+                    </ul>
+                </div>
+                
+                <div class="code-block">
+                    <h3>⚡ Quick Start</h3>
+                    <pre># Full development cycle
+make dev              # Build → Flash → Demo
+
+# Demo only (simulation)
+make demo             # Web interface
+make demo-real        # Real device
+
+# Testing
+make test             # All tests
+make build            # Build firmware
+make flash            # Flash device
+
+# Stop processes
+make stop             # Stop demo</pre>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script>
+        let currentScale = 1.0;
+        const minScale = 0.5;
+        const maxScale = 2.0;
+        let mermaidInitialized = false;
+
+        // Initialize Mermaid
+        async function initMermaid() {
+            if (!mermaidInitialized) {
+                await mermaid.initialize({
+                    startOnLoad: false,
+                    theme: 'default',
+                    themeVariables: {
+                        primaryColor: '#667eea',
+                        primaryTextColor: '#333',
+                        lineColor: '#667eea',
+                        secondaryColor: '#764ba2',
+                        fontSize: '14px'
+                    },
+                    flowchart: {
+                        useMaxWidth: false,
+                        htmlLabels: true
+                    },
+                    graph: {
+                        useMaxWidth: false
+                    }
+                });
+                mermaidInitialized = true;
+            }
+        }
+
+        // Render specific diagram
+        async function renderDiagram(diagramId) {
+            const diagramElement = document.getElementById(diagramId);
+            if (!diagramElement) return;
+            
+            try {
+                await mermaid.run({
+                    nodes: [diagramElement],
+                    suppressErrors: false
+                });
+                console.log('Diagram rendered:', diagramId);
+                applyScale();
+            } catch (err) {
+                console.error('Error rendering diagram:', err, diagramId);
+            }
+        }
+
+        // Tab switching
+        function showTab(tabName) {
+            // Hide all tabs
+            document.querySelectorAll('.tab-pane').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            // Remove active class from buttons
+            document.querySelectorAll('.nav-tab').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            
+            // Show selected tab
+            const targetTab = document.getElementById(tabName);
+            if (targetTab) {
+                targetTab.classList.add('active');
+            }
+            
+            // Activate button
+            const targetBtn = document.querySelector(`[data-tab="${tabName}"]`);
+            if (targetBtn) {
+                targetBtn.classList.add('active');
+            }
+            
+            // Render diagrams for the active tab
+            setTimeout(() => {
+                switch(tabName) {
+                    case 'overview':
+                        renderDiagram('overview-diagram');
+                        break;
+                    case 'architecture':
+                        renderDiagram('architecture-diagram');
+                        break;
+                    case 'firmware':
+                        renderDiagram('firmware-diagram');
+                        break;
+                    case 'web':
+                        renderDiagram('web-diagram');
+                        break;
+                    case 'security':
+                        renderDiagram('security-diagram');
+                        break;
+                    case 'deployment':
+                        renderDiagram('deployment-diagram');
+                        break;
+                }
+            }, 100);
+        }
+
+        // Scale controls
+        function changeScale(delta) {
+            currentScale = Math.max(minScale, Math.min(maxScale, currentScale + delta));
+            updateScaleDisplay();
+            applyScale();
+        }
+
+        function resetScale() {
+            currentScale = 1.0;
+            updateScaleDisplay();
+            applyScale();
+        }
+
+        function updateScaleDisplay() {
+            const displays = document.querySelectorAll('.scale-display');
+            displays.forEach(display => {
+                display.textContent = Math.round(currentScale * 100) + '%';
+            });
+        }
+
+        function applyScale() {
+            const mermaidElements = document.querySelectorAll('.mermaid svg');
+            mermaidElements.forEach(svg => {
+                svg.style.transform = `scale(${currentScale})`;
+                svg.style.transformOrigin = 'center';
+                svg.style.display = 'block';
+                svg.style.margin = '0 auto';
+            });
+        }
+
+        // Initialize event listeners
+        document.addEventListener('DOMContentLoaded', async () => {
+            // Initialize Mermaid
+            await initMermaid();
+            
+            // Tab switching
+            document.querySelectorAll('.nav-tab').forEach(tab => {
+                tab.addEventListener('click', (e) => {
+                    const tabName = e.currentTarget.dataset.tab;
+                    showTab(tabName);
+                });
+            });
+
+            // Show overview tab by default and render its diagram
+            showTab('overview');
+        });
+    </script>
+</body>
+</html>

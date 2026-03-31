@@ -1,37 +1,13 @@
 #include "test_framework.h"
-#include "unit/test_uart.c"
-#include "unit/test_flash.c"
-#include "unit/test_ota.c"
-#include "integration/test_system.c"
+#include "mocks/freertos_mock.h"
+#include "mocks/hal_mock.h"
+#include "unit/test_uart.h"
+#include "unit/test_flash.h"
+#include "unit/test_ota.h"
+#include "integration/test_system.h"
 
-// Mock FreeRTOS functions for testing
-void vTaskDelay(const TickType_t xTicksToDelay) {
-    HAL_Delay(xTicksToDelay);
-}
-
-BaseType_t xQueueCreate(UBaseType_t uxQueueLength, UBaseType_t uxItemSize) {
-    return pdTRUE; // Mock success
-}
-
-BaseType_t xQueueSend(QueueHandle_t xQueue, const void *pvItemToQueue, TickType_t xTicksToWait) {
-    return pdTRUE; // Mock success
-}
-
-BaseType_t xQueueReceive(QueueHandle_t xQueue, void *pvBuffer, TickType_t xTicksToWait) {
-    return pdTRUE; // Mock success
-}
-
-void* xSemaphoreCreateMutex(void) {
-    return (void*)1; // Mock valid handle
-}
-
-BaseType_t xSemaphoreTake(SemaphoreHandle_t xSemaphore, TickType_t xTicksToWait) {
-    return pdTRUE; // Mock success
-}
-
-BaseType_t xSemaphoreGive(SemaphoreHandle_t xSemaphore) {
-    return pdTRUE; // Mock success
-}
+// Define config for FreeRTOS mock
+#define configTICK_RATE_HZ 1000
 
 int main(void)
 {

@@ -1,3 +1,16 @@
+/**
+ * @file update_task.c
+ * @brief OTA update task implementation for firmware management
+ * 
+ * This file implements the OTA update task functionality including firmware
+ * download, verification, installation, dual-bank management, and rollback
+ * procedures with FreeRTOS integration.
+ * 
+ * @author Secure IoT Team
+ * @date 2026
+ * @version 1.0.0
+ */
+
 #include "update_task.h"
 #include "uart.h"
 #include "flash_if.h"
@@ -11,7 +24,12 @@
 extern QueueHandle_t uart_rx_queue;
 extern SemaphoreHandle_t flash_mutex;
 
-// OTA state machine
+/**
+ * @brief OTA state machine enumeration
+ * 
+ * Internal state machine for managing the OTA update process
+ * from initialization through completion or rollback.
+ */
 typedef enum {
     OTA_STATE_IDLE,
     OTA_STATE_WAITING_START,

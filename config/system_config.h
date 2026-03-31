@@ -1,18 +1,31 @@
-#pragma once
+/**
+ * @file system_config.h
+ * @brief System configuration constants and memory layout definitions
+ * 
+ * This header defines system-wide configuration constants, memory addresses,
+ * flash sector mappings, and hardware-specific settings for the STM32F4-based
+ * Secure IoT Sensor Node.
+ * 
+ * @author Secure IoT Team
+ * @date 2026
+ * @version 1.0.0
+ */
+
+#ifndef SYSTEM_CONFIG_H
+#define SYSTEM_CONFIG_H
 
 #include <stdint.h>
 
-// Memory Map
-#define BOOTLOADER_ADDR       0x08000000
-#define APP_SLOT_A_ADDR       0x08010000
-#define APP_SLOT_B_ADDR       0x08050000
-#define METADATA_ADDR         0x0800F000
+/* Memory Map Definitions */
+#define BOOTLOADER_ADDR       0x08000000  /**< Bootloader start address */
+#define APP_SLOT_A_ADDR       0x08010000  /**< Application slot A address */
+#define APP_SLOT_B_ADDR       0x08050000  /**< Application slot B address */
+#define METADATA_ADDR         0x0800F000  /**< OTA metadata address */
 
-#define APP_SIZE              0x40000  // 256KB
-#define BOOTLOADER_SIZE       0x10000  // 64KB
-#define METADATA_SIZE         0x1000   // 4KB
-
-// Flash Sectors (STM32F4)
+/* Size Definitions */
+#define APP_SIZE              0x40000     /**< Application size (256KB) */
+#define BOOTLOADER_SIZE       0x10000     /**< Bootloader size (64KB) */
+#define METADATA_SIZE         0x1000      /**< Metadata size (4KB) */
 #define FLASH_SECTOR_0        0x00000000
 #define FLASH_SECTOR_1        0x00004000
 #define FLASH_SECTOR_2        0x00008000
@@ -54,12 +67,14 @@
 #define FLASH_SECTOR_SIZE     0x20000
 #define WEAR_LEVEL_THRESHOLD  1000
 
-// Hardware Configuration
+/* Hardware Configuration */
 #define LED_STATUS_PIN        GPIO_PIN_13
 #define LED_STATUS_PORT       GPIOC
 #define BUTTON_USER_PIN       GPIO_PIN_0
 #define BUTTON_USER_PORT      GPIOA
 
-// Debug Configuration
+/* Debug Configuration */
 #define DEBUG_ENABLED         1
 #define ASSERT_ENABLED        1
+
+#endif // SYSTEM_CONFIG_H

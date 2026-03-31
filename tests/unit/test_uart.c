@@ -1,30 +1,57 @@
+/**
+ * @file test_uart.c
+ * @brief Unit tests for UART driver functionality
+ * 
+ * This file contains unit tests for UART communication including
+ * initialization, data transmission, string operations, and buffer
+ * management.
+ * 
+ * @author Secure IoT Team
+ * @date 2026
+ * @version 1.0.0
+ */
+
 #include "../test_framework.h"
 #include "../mocks/hal_mock.h"
-#include "../drivers/uart.h"
+#include "../../drivers/uart.h"
 #include <string.h>
 
-// Test UART initialization
+/**
+ * @brief Test UART initialization
+ * 
+ * Verifies that UART peripheral can be properly initialized
+ * and internal buffers are reset.
+ * 
+ * @return int 1 if test passes, 0 otherwise
+ */
 int test_uart_init(void)
 {
     mock_reset();
     
     uart_init();
     
-    // Check that UART was initialized (mock verification)
+    // Verify UART initialization state
     TEST_ASSERT(g_mock_state.uart_tx_len == 0);
     TEST_ASSERT(g_mock_state.uart_rx_len == 0);
     
     return 1;
 }
 
-// Test UART write functionality
+/**
+ * @brief Test UART write functionality
+ * 
+ * Verifies that data can be written to UART transmission buffer
+ * correctly.
+ * 
+ * @return int 1 if test passes, 0 otherwise
+ */
 int test_uart_write(void)
 {
     mock_reset();
     uart_init();
     
     uint8_t test_data[] = "Hello World";
-    uint16_t len = sizeof(test_data) - 1; // Exclude null terminator
+    const uint16_t len = sizeof(test_data) - 1; // Exclude null terminator
     
     uart_write(test_data, len);
     
@@ -34,7 +61,14 @@ int test_uart_write(void)
     return 1;
 }
 
-// Test UART write string
+/**
+ * @brief Test UART string write functionality
+ * 
+ * Verifies that null-terminated strings can be written
+ * to UART correctly.
+ * 
+ * @return int 1 if test passes, 0 otherwise
+ */
 int test_uart_write_string(void)
 {
     mock_reset();
@@ -44,26 +78,33 @@ int test_uart_write_string(void)
     
     uart_write_string(test_str);
     
-    uint16_t expected_len = strlen(test_str);
+    const uint16_t expected_len = strlen(test_str);
     TEST_ASSERT(g_mock_state.uart_tx_len == expected_len);
     TEST_ASSERT_MEM_EQUAL(test_str, g_mock_state.uart_tx_buffer, expected_len);
     
     return 1;
 }
 
-// Test UART read functionality
+/**
+ * @brief Test UART read functionality
+ * 
+ * Verifies that data can be read from UART receive buffer
+ * correctly using mock data injection.
+ * 
+ * @return int 1 if test passes, 0 otherwise
+ */
 int test_uart_read(void)
 {
     mock_reset();
     uart_init();
     
     uint8_t inject_data[] = "RX Data";
-    uint16_t inject_len = sizeof(inject_data) - 1;
+    const uint16_t inject_len = sizeof(inject_data) - 1;
     
     mock_uart_inject_data(inject_data, inject_len);
     
     uint8_t read_buffer[32];
-    uint16_t read_len = uart_read(read_buffer, sizeof(read_buffer));
+    const uint16_t read_len = uart_read(read_buffer, sizeof(read_buffer));
     
     TEST_ASSERT(read_len == inject_len);
     TEST_ASSERT_MEM_EQUAL(inject_data, read_buffer, inject_len);
@@ -71,7 +112,14 @@ int test_uart_read(void)
     return 1;
 }
 
-// Test UART buffer overflow
+/**
+ * @brief Test UART buffer overflow handling
+ * 
+ * Verifies that UART driver handles buffer overflow conditions
+ * gracefully.
+ * 
+ * @return int 1 if test passes, 0 otherwise
+ */
 int test_uart_buffer_overflow(void)
 {
     mock_reset();

@@ -1,9 +1,29 @@
+/**
+ * @file test_flash.c
+ * @brief Unit tests for flash storage interface
+ * 
+ * This file contains unit tests for flash storage operations including
+ * initialization, read/write operations, erase functionality, and wear
+ * leveling management.
+ * 
+ * @author Secure IoT Team
+ * @date 2026
+ * @version 1.0.0
+ */
+
 #include "../test_framework.h"
 #include "../mocks/hal_mock.h"
-#include "../drivers/flash_if.h"
+#include "../../drivers/flash_if.h"
 #include <string.h>
 
-// Test flash storage initialization
+/**
+ * @brief Test flash storage initialization
+ * 
+ * Verifies that flash storage system can be properly initialized
+ * and returns BOOT_OK status.
+ * 
+ * @return int 1 if test passes, 0 otherwise
+ */
 int test_flash_storage_init(void)
 {
     mock_reset();
@@ -15,15 +35,22 @@ int test_flash_storage_init(void)
     return 1;
 }
 
-// Test flash storage write
+/**
+ * @brief Test flash storage write operation
+ * 
+ * Verifies that data can be written to flash storage correctly
+ * with proper error handling.
+ * 
+ * @return int 1 if test passes, 0 otherwise
+ */
 int test_flash_storage_write(void)
 {
     mock_reset();
     flash_storage_init();
     
     uint8_t test_data[] = "Flash Test Data";
-    uint32_t addr = STORAGE_FLASH_BASE;
-    uint32_t len = sizeof(test_data) - 1;
+    const uint32_t addr = STORAGE_FLASH_BASE;
+    const uint32_t len = sizeof(test_data) - 1;
     
     boot_error_t result = flash_storage_write(addr, test_data, len);
     
@@ -37,15 +64,22 @@ int test_flash_storage_write(void)
     return 1;
 }
 
-// Test flash storage read
+/**
+ * @brief Test flash storage read operation
+ * 
+ * Verifies that data can be read from flash storage correctly
+ * and matches previously written data.
+ * 
+ * @return int 1 if test passes, 0 otherwise
+ */
 int test_flash_storage_read(void)
 {
     mock_reset();
     flash_storage_init();
     
     uint8_t test_data[] = "Read Test Data";
-    uint32_t addr = STORAGE_FLASH_BASE;
-    uint32_t len = sizeof(test_data) - 1;
+    const uint32_t addr = STORAGE_FLASH_BASE;
+    const uint32_t len = sizeof(test_data) - 1;
     
     // Pre-write data to mock flash
     mock_flash_write(addr, test_data, len);

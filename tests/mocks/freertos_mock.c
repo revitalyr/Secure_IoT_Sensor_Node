@@ -45,6 +45,7 @@ QueueHandle_t xQueueCreate(UBaseType_t uxQueueLength, UBaseType_t uxItemSize)
 
 BaseType_t xQueueSend(QueueHandle_t xQueue, const void *pvItemToQueue, TickType_t xTicksToWait)
 {
+    (void)xTicksToWait;
     mock_queue_t* queue = (mock_queue_t*)xQueue;
     if (!queue || !pvItemToQueue || queue->count >= queue->capacity) {
         return pdFALSE;
@@ -61,6 +62,7 @@ BaseType_t xQueueSend(QueueHandle_t xQueue, const void *pvItemToQueue, TickType_
 
 BaseType_t xQueueReceive(QueueHandle_t xQueue, void *pvBuffer, TickType_t xTicksToWait)
 {
+    (void)xTicksToWait;
     mock_queue_t* queue = (mock_queue_t*)xQueue;
     if (!queue || !pvBuffer || queue->count == 0) {
         return pdFALSE;
@@ -77,6 +79,7 @@ BaseType_t xQueueReceive(QueueHandle_t xQueue, void *pvBuffer, TickType_t xTicks
 
 BaseType_t xQueueSendFromISR(QueueHandle_t xQueue, const void *pvItemToQueue, BaseType_t *pxHigherPriorityTaskWoken)
 {
+    (void)pxHigherPriorityTaskWoken;
     // Simplified ISR version - same as normal version for testing
     return xQueueSend(xQueue, pvItemToQueue, 0);
 }
@@ -92,6 +95,7 @@ SemaphoreHandle_t xSemaphoreCreateMutex(void)
 
 BaseType_t xSemaphoreTake(SemaphoreHandle_t xSemaphore, TickType_t xTicksToWait)
 {
+    (void)xTicksToWait;
     mock_semaphore_t* sem = (mock_semaphore_t*)xSemaphore;
     if (!sem) return pdFALSE;
     
@@ -114,11 +118,17 @@ BaseType_t xSemaphoreGive(SemaphoreHandle_t xSemaphore)
 
 BaseType_t xSemaphoreGiveFromISR(SemaphoreHandle_t xSemaphore, BaseType_t *pxHigherPriorityTaskWoken)
 {
+    (void)pxHigherPriorityTaskWoken;
     return xSemaphoreGive(xSemaphore);
 }
 
 BaseType_t xTaskCreate(void (*pvTaskCode)(void *), const char *pcName, uint16_t usStackDepth, void *pvParameters, UBaseType_t uxPriority, TaskHandle_t *pxCreatedTask)
 {
+    (void)pvTaskCode;
+    (void)pcName;
+    (void)usStackDepth;
+    (void)pvParameters;
+    (void)uxPriority;
     // For testing, we don't actually create tasks
     if (pxCreatedTask) {
         *pxCreatedTask = (TaskHandle_t)1; // Mock handle
@@ -138,16 +148,25 @@ TickType_t xTaskGetTickCount(void)
 
 BaseType_t xTaskNotify(TaskHandle_t xTaskToNotify, uint32_t ulValue, eNotifyAction eAction, uint32_t *pulPreviousNotifyValue)
 {
+    (void)xTaskToNotify;
+    (void)ulValue;
+    (void)eAction;
+    (void)pulPreviousNotifyValue;
     return pdTRUE; // Mock success
 }
 
 BaseType_t xTaskNotifyFromISR(TaskHandle_t xTaskToNotify, uint32_t ulValue, BaseType_t *pxHigherPriorityTaskWoken)
 {
+    (void)xTaskToNotify;
+    (void)ulValue;
+    (void)pxHigherPriorityTaskWoken;
     return pdTRUE; // Mock success
 }
 
 uint32_t ulTaskNotifyTake(BaseType_t xClearCountOnExit, TickType_t xTicksToWait)
 {
+    (void)xClearCountOnExit;
+    (void)xTicksToWait;
     return 1; // Mock notification received
 }
 

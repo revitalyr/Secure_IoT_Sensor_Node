@@ -1,3 +1,16 @@
+/**
+ * @file comm_task.c
+ * @brief Communication task implementation for UART data transmission
+ * 
+ * This file implements the communication task functionality including
+ * UART packet processing, CRC validation, and data transmission
+ * with FreeRTOS integration.
+ * 
+ * @author Secure IoT Team
+ * @date 2026
+ * @version 1.0.0
+ */
+
 #include "comm_task.h"
 #include "uart.h"
 #include "FreeRTOS.h"
@@ -10,15 +23,18 @@
 extern QueueHandle_t sensor_queue;
 extern SemaphoreHandle_t uart_mutex;
 
-// Communication packet structure
+/**
+ * @brief Communication packet structure
+ * 
+ * Defines the binary packet format for UART communication with
+ * header, length, data payload, and CRC16 validation.
+ */
 typedef struct {
-    uint8_t header;
-    uint8_t type;
-    uint8_t len;
-    float payload;
-    uint32_t timestamp;
-    uint16_t crc;
-} __attribute__((packed)) comm_packet_t;
+    uint8_t header;         /**< Packet header byte */
+    uint16_t length;        /**< Data payload length */
+    uint8_t data[256];      /**< Data payload buffer */
+    uint16_t crc;          /**< CRC16 checksum */
+} comm_packet_t;
 
 // Packet types
 #define PACKET_TYPE_SENSOR_DATA    0x01

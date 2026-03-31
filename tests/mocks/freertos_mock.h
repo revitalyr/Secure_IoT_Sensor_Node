@@ -1,15 +1,38 @@
-#pragma once
+/**
+ * @file freertos_mock.h
+ * @brief FreeRTOS mock interface for testing
+ * 
+ * This header defines FreeRTOS mock interfaces, type definitions,
+ * and simulated RTOS functionality for unit testing without
+ * actual FreeRTOS dependencies.
+ * 
+ * @author Secure IoT Team
+ * @date 2026
+ * @version 1.0.0
+ */
+
+#ifndef FREERTOS_MOCK_H
+#define FREERTOS_MOCK_H
 
 #include "../test_framework.h"
 #include <stdint.h>
 
-// FreeRTOS type definitions for testing
-typedef void* QueueHandle_t;
-typedef void* SemaphoreHandle_t;
-typedef void* TaskHandle_t;
-typedef uint32_t TickType_t;
-typedef long BaseType_t;
-typedef unsigned long UBaseType_t;
+/* FreeRTOS Type Definitions for Testing */
+typedef void* QueueHandle_t;          /**< Mock queue handle type */
+typedef void* SemaphoreHandle_t;     /**< Mock semaphore handle type */
+typedef void* TaskHandle_t;          /**< Mock task handle type */
+typedef uint32_t TickType_t;         /**< Tick count type */
+typedef long BaseType_t;             /**< Base return type */
+typedef unsigned long UBaseType_t;   /**< Unsigned base type */
+
+/* FreeRTOS Enums */
+typedef enum {
+    eNoAction = 0,
+    eSetBits,
+    eIncrement,
+    eSetValueWithOverwrite,
+    eSetValueWithoutOverwrite
+} eNotifyAction;
 
 // Constants
 #define pdTRUE 1
@@ -31,7 +54,7 @@ BaseType_t xSemaphoreGiveFromISR(SemaphoreHandle_t xSemaphore, BaseType_t *pxHig
 BaseType_t xTaskCreate(void (*pvTaskCode)(void *), const char *pcName, uint16_t usStackDepth, void *pvParameters, UBaseType_t uxPriority, TaskHandle_t *pxCreatedTask);
 void vTaskDelay(const TickType_t xTicksToDelay);
 TickType_t xTaskGetTickCount(void);
-BaseType_t xTaskNotify(TaskHandle_t xTaskToNotify, uint32_t ulValue, eNotifyAction eAction, uint32_t *pulPreviousNotifyValue);
+BaseType_t xTaskNotify(TaskHandle_t xTaskToNotify, uint32_t ulValue, uint32_t eAction, uint32_t *pulPreviousNotifyValue);
 BaseType_t xTaskNotifyFromISR(TaskHandle_t xTaskToNotify, uint32_t ulValue, BaseType_t *pxHigherPriorityTaskWoken);
 uint32_t ulTaskNotifyTake(BaseType_t xClearCountOnExit, TickType_t xTicksToWait);
 
@@ -43,3 +66,12 @@ BaseType_t xTaskResumeAll(void);
 extern QueueHandle_t mock_sensor_queue;
 extern SemaphoreHandle_t mock_flash_mutex;
 extern SemaphoreHandle_t mock_uart_mutex;
+
+/* Global Variables (for compatibility with firmware) */
+extern QueueHandle_t sensor_queue;    /**< Sensor data queue */
+extern QueueHandle_t uart_rx_queue;   /**< UART receive queue */
+extern QueueHandle_t data_queue;      /**< General data queue */
+extern SemaphoreHandle_t flash_mutex; /**< Flash access mutex */
+extern SemaphoreHandle_t uart_mutex;  /**< UART access mutex */
+
+#endif // FREERTOS_MOCK_H

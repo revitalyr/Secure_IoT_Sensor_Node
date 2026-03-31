@@ -1,11 +1,34 @@
-#pragma once
+/**
+ * @file test_framework.h
+ * @brief Test framework interface for unit and integration testing
+ * 
+ * This header defines the test framework interface, assertion macros,
+ * test suite structures, and testing utilities for comprehensive
+ * unit and integration testing of the Secure IoT Sensor Node.
+ * 
+ * @author Secure IoT Team
+ * @date 2026
+ * @version 1.0.0
+ */
+
+#ifndef TEST_FRAMEWORK_H
+#define TEST_FRAMEWORK_H
 
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <assert.h>
 
-// Test framework macros
+/* Test Framework Macros */
+
+/**
+ * @brief Test assertion macro
+ * 
+ * Asserts that a condition is true during test execution.
+ * Reports failure with file, line, and condition information.
+ * 
+ * @param condition Boolean condition to test
+ */
 #define TEST_ASSERT(condition) \
     do { \
         if (!(condition)) { \
@@ -65,12 +88,15 @@ typedef struct {
 // Test runner functions
 int run_test_suite(const test_suite_t* suite);
 int run_test_case(const test_case_t* test);
+void print_test_summary(void);
 
 // Mock functions for hardware
 void mock_init(void);
 void mock_reset(void);
 
-// Global test state
-extern int tests_run;
-extern int tests_passed;
-extern int tests_failed;
+/* Global Test State */
+extern int tests_run;     /**< Total number of tests executed */
+extern int tests_passed;  /**< Number of tests passed */
+extern int tests_failed;  /**< Number of tests failed */
+
+#endif // TEST_FRAMEWORK_H

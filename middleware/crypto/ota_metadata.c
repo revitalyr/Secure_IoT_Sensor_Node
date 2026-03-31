@@ -1,9 +1,23 @@
+/**
+ * @file ota_metadata.c
+ * @brief OTA metadata management implementation
+ * 
+ * This file implements the OTA metadata management functionality including
+ * persistent storage operations, slot management, update state tracking,
+ * and rollback procedures for firmware updates.
+ * 
+ * @author Secure IoT Team
+ * @date 2026
+ * @version 1.0.0
+ */
+
 #include "ota_metadata.h"
 #include "flash_if.h"
 #include <string.h>
 
-static ota_metadata_t g_metadata;
-static uint8_t g_metadata_valid = 0;
+/* Static Variables */
+static ota_metadata_t g_metadata;       /**< Cached metadata structure */
+static uint8_t g_metadata_valid = 0;    /**< Metadata validity flag */
 
 boot_error_t ota_metadata_init(void)
 {
