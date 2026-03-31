@@ -38,14 +38,6 @@
 /* Local configuration - these should be moved to system_config.h in production */
 #define MAIN_WEB_TASK_PRIORITY        (tskIDLE_PRIORITY + 2U)
 
-/* Stack sizes - verified with high-water mark monitoring */
-#define MAIN_SENSOR_TASK_STACK_SIZE   256U         /**< Sensor task stack size */
-#define MAIN_WEB_TASK_STACK_SIZE      512U         /**< Web interface task stack size */
-
-/* Queue configuration */
-#define MAIN_SENSOR_QUEUE_DEPTH       5U           /**< Sensor data queue depth */
-#define MAIN_UART_QUEUE_DEPTH         10U          /**< UART receive queue depth */
-
 /* ── Static Data and Handles ─────────────────────────────────── */
 
 /** FreeRTOS objects */
@@ -160,9 +152,9 @@ static bool main_create_tasks(void)
     result = xTaskCreate(
         sensor_task,                    /* Task function */
         "SensorTask",                   /* Task name */
-        MAIN_SENSOR_TASK_STACK_SIZE,     /* Stack size */
+        SENSOR_TASK_STACK_SIZE,          /* Stack size */
         NULL,                           /* Task parameter */
-        MAIN_SENSOR_TASK_PRIORITY,      /* Task priority */
+        SENSOR_TASK_PRIORITY,            /* Task priority */
         &s_sensor_task_handle);         /* Task handle */
     
     if (result != pdPASS) {
@@ -173,9 +165,9 @@ static bool main_create_tasks(void)
     result = xTaskCreate(
         comm_task,                     /* Task function */
         "CommTask",                    /* Task name */
-        MAIN_COMM_TASK_STACK_SIZE,       /* Stack size */
+        COMM_TASK_STACK_SIZE,           /* Stack size */
         NULL,                           /* Task parameter */
-        MAIN_COMM_TASK_PRIORITY,         /* Task priority */
+        COMM_TASK_PRIORITY,             /* Task priority */
         &s_comm_task_handle);          /* Task handle */
     
     if (result != pdPASS) {
@@ -186,9 +178,9 @@ static bool main_create_tasks(void)
     result = xTaskCreate(
         storage_task,                   /* Task function */
         "StorageTask",                  /* Task name */
-        MAIN_STORAGE_TASK_STACK_SIZE,    /* Stack size */
+        STORAGE_TASK_STACK_SIZE,         /* Stack size */
         NULL,                           /* Task parameter */
-        MAIN_STORAGE_TASK_PRIORITY,      /* Task priority */
+        STORAGE_TASK_PRIORITY,           /* Task priority */
         &s_storage_task_handle);        /* Task handle */
     
     if (result != pdPASS) {
@@ -199,9 +191,9 @@ static bool main_create_tasks(void)
     result = xTaskCreate(
         update_task,                    /* Task function */
         "UpdateTask",                   /* Task name */
-        MAIN_UPDATE_TASK_STACK_SIZE,     /* Stack size */
+        UPDATE_TASK_STACK_SIZE,          /* Stack size */
         NULL,                           /* Task parameter */
-        MAIN_UPDATE_TASK_PRIORITY,       /* Task priority */
+        UPDATE_TASK_PRIORITY,            /* Task priority */
         &s_update_task_handle);         /* Task handle */
     
     if (result != pdPASS) {
@@ -212,9 +204,9 @@ static bool main_create_tasks(void)
     result = xTaskCreate(
         web_interface_task,             /* Task function */
         "WebTask",                      /* Task name */
-        MAIN_WEB_TASK_STACK_SIZE,       /* Stack size */
+        WEB_TASK_STACK_SIZE,            /* Stack size */
         NULL,                           /* Task parameter */
-        MAIN_WEB_TASK_PRIORITY,         /* Task priority */
+        WEB_TASK_PRIORITY,              /* Task priority */
         &s_web_task_handle);           /* Task handle */
     
     if (result != pdPASS) {
@@ -225,9 +217,9 @@ static bool main_create_tasks(void)
     result = xTaskCreate(
         led_task,                      /* Task function */
         "LedTask",                      /* Task name */
-        MAIN_LED_TASK_STACK_SIZE,        /* Stack size */
+        LED_TASK_STACK_SIZE,             /* Stack size */
         NULL,                           /* Task parameter */
-        MAIN_LED_TASK_PRIORITY,          /* Task priority */
+        LED_TASK_PRIORITY,              /* Task priority */
         &s_led_task_handle);            /* Task handle */
     
     if (result != pdPASS) {
@@ -238,9 +230,9 @@ static bool main_create_tasks(void)
     result = xTaskCreate(
         performance_task,               /* Task function */
         "PerfTask",                     /* Task name */
-        MAIN_PERF_TASK_STACK_SIZE,       /* Stack size */
+        PERF_TASK_STACK_SIZE,            /* Stack size */
         NULL,                           /* Task parameter */
-        MAIN_PERF_TASK_PRIORITY,         /* Task priority */
+        PERF_TASK_PRIORITY,              /* Task priority */
         &s_perf_task_handle);           /* Task handle */
     
     if (result != pdPASS) {

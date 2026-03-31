@@ -113,7 +113,6 @@ const FullSensorData_t* sensor_get_data_isr(void);
 /* ── Configuration Constants ───────────────────────────────────── */
 
 /** Sensor task configuration */
-#define SENSOR_TASK_STACK_SIZE       256U
 #define SENSOR_UPDATE_PERIOD_MS      2000U
 
 /* Sensor physical limits - based on real-world constraints */
